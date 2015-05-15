@@ -24,4 +24,9 @@ public class SchedulerTest {
 		assertEquals("1730", schedule.getEndTime());
 	}
 
+	@Test
+	public void shouldResolveConflictsWithEarlierTimestamp() throws IOException {
+		Map<String, String> booking = schedule.entries().get("2011-03-21 09:00");
+		assertEquals("EMP002", booking.get("employeeId"));
+	}
 }
