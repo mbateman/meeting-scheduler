@@ -9,22 +9,21 @@ import java.util.List;
 
 public class BookingReader {
 
-	private List<String> bookings = new ArrayList<>();
-	private String officeHours;
-	
-	public List<String> getBookings() {
-		return bookings;
-	}
+	private static OfficeHours officeHours;
 
-	public String getOfficeHours() {
+	public static OfficeHours getOfficeHours() {
 		return officeHours;
 	}
 	
-	public void readBookings() throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(new File("resources/schedule")));
-        officeHours = reader.readLine();
+	public static List<String> readBookingSubmissions() throws IOException {
+		BufferedReader reader = new BufferedReader(new FileReader(new File("resources/schedule")));
+        String officeHoursEntry = reader.readLine();
+		String startTime = officeHoursEntry.split(" ")[0];
+		String endTime = officeHoursEntry.split(" ")[1];
+		officeHours = new OfficeHours(startTime, endTime);
         String firstLine;
         String secondLine;
+        List<String> bookings = new ArrayList<>();
         while ((firstLine = reader.readLine()) != null) {
         	if (!firstLine.isEmpty()) {
         		secondLine = reader.readLine();
@@ -34,5 +33,6 @@ public class BookingReader {
         	}
         }
         reader.close();
+		return bookings;
 	}
 }

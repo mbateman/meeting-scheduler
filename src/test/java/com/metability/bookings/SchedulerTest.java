@@ -12,35 +12,52 @@ import org.junit.Test;
 
 public class SchedulerTest {
 
-	private BoookingScheduler schedule;
+	private BookingScheduler scheduler;
 	
 	@Before
 	public void setUp() throws IOException {
-		schedule = BoookingScheduler.initialize();
+		scheduler = BookingScheduler.initialize();
 	}
 
 	@Test
 	public void shouldSetupBookingSchedule() throws IOException {
-		assertEquals(5, schedule.bookings().size());
-		OfficeHours officeHours = schedule.getOfficeHours();
+		assertEquals(5, scheduler.getBookings().size());
+		OfficeHours officeHours = scheduler.getOfficeHours();
 		assertEquals("0900", officeHours.getStartTime());
 		assertEquals("1730", officeHours.getEndTime());
-		assertEquals("EMP005", schedule.bookings().get(0).getEmployeeId());
-		assertEquals("EMP004", schedule.bookings().get(schedule.bookings().size()-1).getEmployeeId());
-		
+		assertEquals("EMP001", scheduler.getBookings().get(0).getEmployeeId());
+		assertEquals("EMP005", scheduler.getBookings().get(scheduler.getBookings().size()-1).getEmployeeId());
 	}
 
 	@Test
 	public void shouldResolveConflictsWithEarlierTimestamp() throws IOException {
-		List<Booking> bookings = schedule.process();
-		boolean hasBooking = bookings.stream().anyMatch(booking -> booking.getEmployeeId().equals("EMP002"));
-		assertTrue(hasBooking);
+		assertEquals(5, scheduler.getBookings().size()); 
+		List<Booking> bookings = scheduler.process();
+		assertEquals(4, bookings.size());
+		boolean noBooking = bookings
+				.stream()
+				.anyMatch(booking -> booking.getEmployeeId().equals("EMP005"));
+		assertFalse(noBooking);
+		boolean doesHaveBooking = bookings
+				.stream()
+				.anyMatch(booking -> booking.getEmployeeId().equals("EMP001"));
+		assertTrue(doesHaveBooking);
+		bookings = scheduler.resolveDoubleBookings();
+		assertEquals(3, bookings.size());
+		boolean doesNothaveBooking = bookings
+				.stream()
+				.anyMatch(booking -> booking.getEmployeeId().equals("EMP001"));
+		assertFalse(doesNothaveBooking);
 	}
 	
 	@Test
 	public void shouldNotSchedulelMeetingsPartlyFallingOutsideOfficeHours() {
-		List<Booking> bookings = schedule.process();
-		boolean hasBooking = bookings.stream().anyMatch(booking -> booking.getEmployeeId().equals("EMP005"));
+		assertEquals(5, scheduler.getBookings().size());
+		List<Booking> bookings = scheduler.process();
+		boolean hasBooking = bookings
+				.stream()
+				.anyMatch(booking -> booking.getEmployeeId().equals("EMP005"));
 		assertFalse(hasBooking);
 	}
+	
 }
