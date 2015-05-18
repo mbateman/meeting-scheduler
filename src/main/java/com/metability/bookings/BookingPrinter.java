@@ -2,16 +2,16 @@ package com.metability.bookings;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toList;
 
 public class BookingPrinter {
 
 	public static void printBookings(List<Booking> bookings) {
-
-		String previousDate = "";
-		for (Booking booking : bookings
+		List<Booking> bookingsByStartDateTime = bookings
 				.stream()
-				.sorted((b1, b2) -> b1.getStartDateTime().compareTo(b2.getStartDateTime())).collect(Collectors.toList())) {
+				.sorted((b1, b2) -> b1.getStartDateTime().compareTo(b2.getStartDateTime())).collect(toList());
+		String previousDate = "";
+		for (Booking booking : bookingsByStartDateTime) {
 			String date = booking.getStartDateTime().format(DateTimeFormatter.ISO_DATE);
 			if (!previousDate.equals(date)) {
 				System.out.println(date+"\n");

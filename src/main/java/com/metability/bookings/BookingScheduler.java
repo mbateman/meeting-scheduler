@@ -10,34 +10,43 @@ import java.util.List;
 
 public class BookingScheduler {
 
-	private List<Booking> bookings = new ArrayList<>();;
+	private List<Booking> bookings;
 	private OfficeHours officeHours;
 
 	private BookingScheduler() {}
 	
 	public static BookingScheduler initialize() throws IOException {
 		BookingScheduler bookingScheduler = new BookingScheduler();
-		bookingScheduler.readBookingSubmissions();
+		bookingScheduler.officeHours = new OfficeHours();
+		bookingScheduler.bookings = readBookingSubmissions();
 		return bookingScheduler;
 	}
 	
-	public List<Booking> process() {
+	public BookingScheduler filterUnschedulableBookings() {
 		bookings = bookings
 			.stream()
 			.filter(booking -> !meetingCanBeScheduled(booking))
+			.collect(toList());
+		return this;
+	}
+
+	public BookingScheduler orderBySubmissionDateTime() {
+		bookings = bookings
+			.stream()
 			.sorted((b1, b2) -> b1.getTimestamp().compareTo(b2.getTimestamp()))
 			.collect(toList());
-		return bookings;
+		return this;
 	}
-	
-	public List<Booking> resolveDoubleBookings() {		
+
+	public BookingScheduler resolveDoubleBookings() {		
 		List<Booking> duplicates = new ArrayList<>(bookings);
 		for (int i=0; i < bookings.size() - 1; i++) {
 			if (bookings.get(i).getStartDateTime().equals(bookings.get(i+1).getStartDateTime())) {
 				duplicates.remove(i+1);
 			}
 		}
-		return duplicates;
+		bookings = duplicates;
+		return this;
 	}
 	
 	public List<Booking> getBookings() {
@@ -48,9 +57,9 @@ public class BookingScheduler {
 		return officeHours;
 	}
 	
-	private void readBookingSubmissions() throws IOException {
+	private static List<Booking> readBookingSubmissions() throws IOException {
 		List<String> bookingSubmissions = BookingReader.readBookingSubmissions();
-		officeHours = BookingReader.getOfficeHours();
+		List<Booking> bookings = new ArrayList<>();
         for (String line : bookingSubmissions) {
         	String[] tokens = line.split(" ");
         	String timestamp = tokens[0].trim() + " "+ tokens[1].trim();
@@ -60,6 +69,7 @@ public class BookingScheduler {
         	Booking booking = new Booking(employeeId, timestamp, startDateTime, duration);
         	bookings.add(booking);
         }
+        return bookings;
      }
 
 	private boolean meetingCanBeScheduled(Booking booking) {

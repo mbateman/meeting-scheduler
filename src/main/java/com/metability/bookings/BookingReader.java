@@ -8,20 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookingReader {
-
-	private static OfficeHours officeHours;
-
-	public static OfficeHours getOfficeHours() {
-		return officeHours;
-	}
 	
 	public static List<String> readBookingSubmissions() throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(new File("resources/schedule")));
-        String officeHoursEntry = reader.readLine();
-		String startTime = officeHoursEntry.split(" ")[0];
-		String endTime = officeHoursEntry.split(" ")[1];
-		officeHours = new OfficeHours(startTime, endTime);
-        String firstLine;
+        reader.readLine();
+		String firstLine;
         String secondLine;
         List<String> bookings = new ArrayList<>();
         while ((firstLine = reader.readLine()) != null) {

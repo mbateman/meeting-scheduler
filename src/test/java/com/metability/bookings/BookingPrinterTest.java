@@ -14,6 +14,7 @@ public class BookingPrinterTest {
 	
 	private BookingScheduler scheduler;
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+	
 	@Before
 	public void setUp() throws IOException {
 		scheduler = BookingScheduler.initialize();
@@ -22,14 +23,18 @@ public class BookingPrinterTest {
 
 	@Test
 	public void shouldPrintSchedule() {
-		assertEquals(5, scheduler.getBookings().size());
-		List<Booking> bookings = scheduler.process();
-		bookings = scheduler.resolveDoubleBookings();
+		List<Booking> bookings = scheduler
+			.filterUnschedulableBookings()
+			.orderBySubmissionDateTime()
+			.resolveDoubleBookings().getBookings();
 		BookingPrinter.printBookings(bookings);
-		String expecteOutput = "2011-03-21\n\n" + "09:00 11:00 EMP002\n\n" +
+		String expectedOutput = 
+				"2011-03-21\n\n" + 
+				"09:00 11:00 EMP002\n\n" +
 				"2011-03-22\n\n" +
-				"14:00 16:00 EMP003\n\n" + "16:00 17:00 EMP004\n\n";
-		assertEquals(expecteOutput, outContent.toString());
+				"14:00 16:00 EMP003\n\n" + 
+				"16:00 17:00 EMP004\n\n";
+		assertEquals(expectedOutput, outContent.toString());
 	}
 
 }
