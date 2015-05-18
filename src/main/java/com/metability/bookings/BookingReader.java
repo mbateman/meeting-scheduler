@@ -31,7 +31,6 @@ public class BookingReader {
         		if (secondLine.isEmpty())
         			secondLine = reader.readLine();
         		bookings.add(firstLine + " " + secondLine);
-        		System.out.println(firstLine + " " + secondLine);
         	}
         }
         reader.close();
