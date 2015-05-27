@@ -11,13 +11,13 @@ public class BookingPrinter {
 				.sorted((b1, b2) -> b1.getStartDateTime()
 				.compareTo(b2.getStartDateTime()))
 				.forEach(booking -> {
-			String date = booking.getStartDateTime().format(DateTimeFormatter.ISO_DATE);
-			if (!schedule.toString().contains(date)) {
-				schedule.append(date+"\n\n");
-			}
-			schedule.append(addMeeting(booking));
+					String date = booking.getStartDateTime().format(DateTimeFormatter.ISO_DATE);
+					if (!schedule.toString().contains(date)) {
+						schedule.append(date+"\n\n");
+					}
+					schedule.append(addMeeting(booking));
 		});
-		System.out.println(schedule.toString().substring(0, schedule.length()-1));
+		System.out.println(schedule.substring(0, schedule.length()-1));
 	}
 
 	private static String addMeeting(Booking booking) {
