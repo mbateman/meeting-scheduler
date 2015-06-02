@@ -1,4 +1,4 @@
-package com.metability.bookings;
+package com.metability.scheduler;
 
 import static java.time.LocalDateTime.of;
 import static java.util.stream.Collectors.toList;

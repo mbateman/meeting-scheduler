@@ -1,4 +1,4 @@
-package com.metability.bookings;
+package com.metability.scheduler;
 
 import java.io.BufferedReader;
 import java.io.File;

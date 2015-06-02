@@ -1,9 +1,10 @@
-package com.metability.bookings;
+package com.metability.scheduler;
 
 import static java.time.LocalDateTime.parse;
 import static java.time.format.DateTimeFormatter.ofPattern;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Booking {
 
@@ -30,8 +31,11 @@ public class Booking {
 	public LocalDateTime getStartDateTime() {
 		return startDateTime;
 	}
-	
-	
+
+	public String getFormattedStartDateTime() {
+		return startDateTime.format(DateTimeFormatter.ISO_DATE);
+	}
+
 	public int getDuration() {
 		return duration;
 	}

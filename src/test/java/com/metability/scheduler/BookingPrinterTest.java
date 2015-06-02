@@ -1,4 +1,4 @@
-package com.metability.bookings;
+package com.metability.scheduler;
 
 import static org.junit.Assert.assertEquals;
 
@@ -9,6 +9,10 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.metability.scheduler.Booking;
+import com.metability.scheduler.BookingPrinter;
+import com.metability.scheduler.BookingScheduler;
 
 public class BookingPrinterTest {
 	
@@ -27,7 +31,7 @@ public class BookingPrinterTest {
 			.filterUnschedulableBookings()
 			.orderBySubmissionDateTime()
 			.resolveDoubleBookings().getBookings();
-		BookingPrinter.printBookings(bookings);
+		BookingPrinter.printBookingsReducer(bookings);
 		String expectedOutput = 
 				"2011-03-21\n\n" + 
 				"09:00 11:00 EMP002\n\n" +

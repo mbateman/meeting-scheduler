@@ -1,4 +1,4 @@
-package com.metability.bookings;
+package com.metability.scheduler;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -9,6 +9,10 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.metability.scheduler.Booking;
+import com.metability.scheduler.BookingScheduler;
+import com.metability.scheduler.OfficeHours;
 
 public class SchedulerTest {
 
