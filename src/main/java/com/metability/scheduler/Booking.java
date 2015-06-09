@@ -39,4 +39,13 @@ public class Booking {
 	public int getDuration() {
 		return duration;
 	}
+	
+	public String meetingFormat() {
+		return String.format("%02d:%02d %02d:%02d %s", 
+			getStartDateTime().getHour(), 
+			getStartDateTime().getMinute(), 
+			getStartDateTime().plusHours(getDuration()).getHour(), 
+			getStartDateTime().plusHours(getDuration()).getMinute(), 
+			getEmployeeId()+"\n\n");
+	}
 }

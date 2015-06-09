@@ -30,8 +30,9 @@ public class BookingPrinterTest {
 		List<Booking> bookings = scheduler
 			.filterUnschedulableBookings()
 			.orderBySubmissionDateTime()
-			.resolveDoubleBookings().getBookings();
-		BookingPrinter.printBookingsReducer(bookings);
+			.resolveDoubleBookings()
+			.getBookings();
+		BookingPrinter.printBookings(bookings);
 		String expectedOutput = 
 				"2011-03-21\n\n" + 
 				"09:00 11:00 EMP002\n\n" +
