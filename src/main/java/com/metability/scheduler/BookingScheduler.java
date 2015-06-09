@@ -5,8 +5,8 @@ import static java.util.stream.Collectors.toList;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class BookingScheduler {
 
@@ -37,18 +37,15 @@ public class BookingScheduler {
 			.collect(toList());
 		return this;
 	}
-
-	public BookingScheduler resolveDoubleBookings() {		
-		List<Booking> duplicates = new ArrayList<>(bookings);
-		for (int i=0; i < bookings.size() - 1; i++) {
-			if (bookings.get(i).getStartDateTime().equals(bookings.get(i+1).getStartDateTime())) {
-				duplicates.remove(i+1);
-			}
-		}
-		bookings = duplicates;
+	
+	public BookingScheduler filterDoubleBookings() {		
+		List<Booking> filtered = bookings
+			.stream()
+			.distinct()
+			.collect(toList());
+		bookings = filtered;
 		return this;
 	}
-	
 	public List<Booking> getBookings() {
 		return bookings;
 	}
@@ -59,18 +56,20 @@ public class BookingScheduler {
 	
 	private static List<Booking> readBookingSubmissions() throws IOException {
 		List<String> bookingSubmissions = BookingReader.readBookingSubmissions();
-		List<Booking> bookings = new ArrayList<>();
-        for (String line : bookingSubmissions) {
-        	String[] tokens = line.split(" ");
-        	String timestamp = tokens[0].trim() + " "+ tokens[1].trim();
-        	String employeeId = tokens[2].trim();
-        	String startDateTime = tokens[3].trim() + " " + tokens[4].trim();
-        	String duration = tokens[5].trim();
-        	Booking booking = new Booking(employeeId, timestamp, startDateTime, duration);
-        	bookings.add(booking);
-        }
-        return bookings;
+   		return bookingSubmissions
+			.stream()
+	        .map(mapToBooking)
+	        .collect(toList());
      }
+	
+    private static Function<String, Booking> mapToBooking = (line) -> {
+    	String[] tokens = line.split(" ");
+	  	String timestamp = tokens[0] + " " + tokens[1];
+	  	String employeeId = tokens[2];
+	  	String startDateTime = tokens[3] + " " + tokens[4];
+	  	String duration = tokens[5];
+	  	return new Booking(employeeId, timestamp, startDateTime, duration);
+  };
 
 	private boolean meetingCanBeScheduled(Booking booking) {
 		return notBeforeOfficeHours(booking) || notAfterOfficeHours(booking);

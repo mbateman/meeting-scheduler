@@ -30,7 +30,7 @@ public class BookingPrinterTest {
 		List<Booking> bookings = scheduler
 			.filterUnschedulableBookings()
 			.orderBySubmissionDateTime()
-			.resolveDoubleBookings()
+			.filterDoubleBookings()
 			.getBookings();
 		BookingPrinter.printBookings(bookings);
 		String expectedOutput = 

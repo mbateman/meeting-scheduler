@@ -60,7 +60,7 @@ public class SchedulerTest {
 		List<Booking> bookings = scheduler
 				.filterUnschedulableBookings()
 				.orderBySubmissionDateTime()
-				.resolveDoubleBookings()
+				.filterDoubleBookings()
 				.getBookings();
 		assertEquals(3, bookings.size());
 		boolean doesNothaveBooking = bookings
