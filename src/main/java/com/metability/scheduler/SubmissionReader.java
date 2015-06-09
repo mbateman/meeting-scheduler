@@ -9,7 +9,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
-public class BookingReader {
+public class SubmissionReader {
 	
 	public static List<String> readBookingSubmissions() throws IOException {
 	return bookingSubmissions()

@@ -10,29 +10,29 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.metability.scheduler.Booking;
-import com.metability.scheduler.BookingPrinter;
-import com.metability.scheduler.BookingScheduler;
+import com.metability.scheduler.Meeting;
+import com.metability.scheduler.SchedulePrinter;
+import com.metability.scheduler.MeetingScheduler;
 
-public class BookingPrinterTest {
+public class SchedulePrinterTest {
 	
-	private BookingScheduler scheduler;
+	private MeetingScheduler scheduler;
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 	
 	@Before
 	public void setUp() throws IOException {
-		scheduler = BookingScheduler.initialize();
+		scheduler = MeetingScheduler.initialize();
 		System.setOut(new PrintStream(outContent));
 	}
 
 	@Test
 	public void shouldPrintSchedule() {
-		List<Booking> bookings = scheduler
+		List<Meeting> bookings = scheduler
 			.filterUnschedulableBookings()
 			.orderBySubmissionDateTime()
 			.filterDoubleBookings()
 			.getBookings();
-		BookingPrinter.printBookings(bookings);
+		SchedulePrinter.printSchedule(bookings);
 		String expectedOutput = 
 				"2011-03-21\n\n" + 
 				"09:00 11:00 EMP002\n\n" +

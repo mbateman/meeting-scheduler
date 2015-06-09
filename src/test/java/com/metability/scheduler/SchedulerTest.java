@@ -10,17 +10,17 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.metability.scheduler.Booking;
-import com.metability.scheduler.BookingScheduler;
+import com.metability.scheduler.Meeting;
+import com.metability.scheduler.MeetingScheduler;
 import com.metability.scheduler.OfficeHours;
 
 public class SchedulerTest {
 
-	private BookingScheduler scheduler;
+	private MeetingScheduler scheduler;
 	
 	@Before
 	public void setUp() throws IOException {
-		scheduler = BookingScheduler.initialize();
+		scheduler = MeetingScheduler.initialize();
 	}
 
 	@Test
@@ -35,14 +35,14 @@ public class SchedulerTest {
 	
 	@Test
 	public void bookingsMustBeProcessedInSubmissionOrder() {
-		List<Booking> bookings = scheduler.orderBySubmissionDateTime().getBookings();
+		List<Meeting> bookings = scheduler.orderBySubmissionDateTime().getBookings();
 		assertEquals("EMP005", bookings.get(0).getEmployeeId());
 		assertEquals("EMP004", bookings.get(bookings.size()-1).getEmployeeId());	
 	}
 
 	@Test
 	public void shouldNotSchedulelMeetingsPartlyFallingOutsideOfficeHours() {
-		List<Booking> bookings = scheduler.filterUnschedulableBookings().getBookings();
+		List<Meeting> bookings = scheduler.filterUnschedulableBookings().getBookings();
 		assertEquals(4, bookings.size());
 		boolean noBooking = bookings
 				.stream()
@@ -57,7 +57,7 @@ public class SchedulerTest {
 	@Test
 	public void shouldResolveConflictsWithEarlierTimestamp() throws IOException {
 		assertEquals(5, scheduler.getBookings().size()); 
-		List<Booking> bookings = scheduler
+		List<Meeting> bookings = scheduler
 				.filterUnschedulableBookings()
 				.orderBySubmissionDateTime()
 				.filterDoubleBookings()

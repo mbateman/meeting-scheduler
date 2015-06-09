@@ -8,21 +8,21 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.Function;
 
-public class BookingScheduler {
+public class MeetingScheduler {
 
-	private List<Booking> bookings;
+	private List<Meeting> bookings;
 	private OfficeHours officeHours;
 
-	private BookingScheduler() {}
+	private MeetingScheduler() {}
 	
-	public static BookingScheduler initialize() throws IOException {
-		BookingScheduler bookingScheduler = new BookingScheduler();
+	public static MeetingScheduler initialize() throws IOException {
+		MeetingScheduler bookingScheduler = new MeetingScheduler();
 		bookingScheduler.officeHours = new OfficeHours();
 		bookingScheduler.bookings = readBookingSubmissions();
 		return bookingScheduler;
 	}
 	
-	public BookingScheduler filterUnschedulableBookings() {
+	public MeetingScheduler filterUnschedulableBookings() {
 		bookings = bookings
 			.stream()
 			.filter(booking -> !meetingCanBeScheduled(booking))
@@ -30,7 +30,7 @@ public class BookingScheduler {
 		return this;
 	}
 
-	public BookingScheduler orderBySubmissionDateTime() {
+	public MeetingScheduler orderBySubmissionDateTime() {
 		bookings = bookings
 			.stream()
 			.sorted((b1, b2) -> b1.getTimestamp().compareTo(b2.getTimestamp()))
@@ -38,15 +38,15 @@ public class BookingScheduler {
 		return this;
 	}
 	
-	public BookingScheduler filterDoubleBookings() {		
-		List<Booking> filtered = bookings
+	public MeetingScheduler filterDoubleBookings() {		
+		List<Meeting> filtered = bookings
 			.stream()
 			.distinct()
 			.collect(toList());
 		bookings = filtered;
 		return this;
 	}
-	public List<Booking> getBookings() {
+	public List<Meeting> getBookings() {
 		return bookings;
 	}
 
@@ -54,28 +54,28 @@ public class BookingScheduler {
 		return officeHours;
 	}
 	
-	private static List<Booking> readBookingSubmissions() throws IOException {
-		List<String> bookingSubmissions = BookingReader.readBookingSubmissions();
+	private static List<Meeting> readBookingSubmissions() throws IOException {
+		List<String> bookingSubmissions = SubmissionReader.readBookingSubmissions();
    		return bookingSubmissions
 			.stream()
 	        .map(mapToBooking)
 	        .collect(toList());
      }
 	
-    private static Function<String, Booking> mapToBooking = (line) -> {
+    private static Function<String, Meeting> mapToBooking = (line) -> {
     	String[] tokens = line.split(" ");
 	  	String timestamp = tokens[0] + " " + tokens[1];
 	  	String employeeId = tokens[2];
 	  	String startDateTime = tokens[3] + " " + tokens[4];
 	  	String duration = tokens[5];
-	  	return new Booking(employeeId, timestamp, startDateTime, duration);
+	  	return new Meeting(employeeId, timestamp, startDateTime, duration);
   };
 
-	private boolean meetingCanBeScheduled(Booking booking) {
+	private boolean meetingCanBeScheduled(Meeting booking) {
 		return notBeforeOfficeHours(booking) || notAfterOfficeHours(booking);
 	}
 
-	private boolean notBeforeOfficeHours(Booking booking) {
+	private boolean notBeforeOfficeHours(Meeting booking) {
 		LocalDateTime time = of(
 				booking.getStartDateTime().getYear(), 
 				booking.getStartDateTime().getMonth(), 
@@ -84,7 +84,7 @@ public class BookingScheduler {
 		return booking.getStartDateTime().isBefore(time);
 	}
 	
-	private boolean notAfterOfficeHours(Booking booking) {
+	private boolean notAfterOfficeHours(Meeting booking) {
 		LocalDateTime time = of(
 				booking.getStartDateTime().getYear(), 
 				booking.getStartDateTime().getMonth(), 

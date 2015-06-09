@@ -2,9 +2,9 @@ package com.metability.scheduler;
 
 import java.util.List;
 
-public class BookingPrinter {
+public class SchedulePrinter {
 
-	public static void printBookings(List<Booking> bookings) {
+	public static void printSchedule(List<Meeting> bookings) {
 		StringBuilder schedule = bookings
 			.stream()
 			.sorted((b1, b2) -> b1.getStartDateTime().compareTo(b2.getStartDateTime()))

@@ -8,11 +8,11 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertThat;
 
-public class BookingReaderTest {
+public class SubmissionReaderTest {
 
 	@Test
 	public void shouldHaveFiveBookings() throws IOException {
-		List<String> bookings = BookingReader.readBookingSubmissions();
+		List<String> bookings = SubmissionReader.readBookingSubmissions();
 		assertThat(bookings.size(), is(5));
 	}
 

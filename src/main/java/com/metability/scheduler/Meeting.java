@@ -6,14 +6,14 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Booking {
+public class Meeting {
 
 	private String employeeId;
 	private LocalDateTime submissionDateTime;
 	private LocalDateTime startDateTime;
 	private int duration;
 
-	public Booking(String employeeId, String timestamp, String startDateTime, String duration) {
+	public Meeting(String employeeId, String timestamp, String startDateTime, String duration) {
 		this.employeeId = employeeId;
 		this.submissionDateTime = parse(timestamp, ofPattern("yyyy-MM-dd HH:mm:ss"));
 		this.startDateTime = parse(startDateTime, ofPattern("yyyy-MM-dd HH:mm"));
@@ -66,7 +66,7 @@ public class Booking {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Booking other = (Booking) obj;
+		Meeting other = (Meeting) obj;
 		if (startDateTime == null) {
 			if (other.startDateTime != null)
 				return false;
