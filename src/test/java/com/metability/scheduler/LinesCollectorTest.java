@@ -24,9 +24,7 @@ public class LinesCollectorTest {
 		String line2 = "y";
 		linesCollector.add(line1);
 		linesCollector.add(line2);
-//		assertThat(linesCollector.line1, ));
 		assertThat(linesCollector.lines().size(), is(1));
-		
 	}
 	
 	@Test
